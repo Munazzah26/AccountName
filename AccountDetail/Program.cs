@@ -44,10 +44,8 @@ namespace AccountDetail
                     foreach (var c in result.Entities)
                     {
                         System.Console.WriteLine(c.Attributes["name"]);
-                        Console.ReadLine();
-
-                    }
-
+                     }
+                    Console.Read();
                 }
             }
             catch (FaultException<OrganizationServiceFault> ex)
