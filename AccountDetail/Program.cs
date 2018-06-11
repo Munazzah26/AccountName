@@ -13,99 +13,72 @@ namespace AccountDetail
 {
     class Program
     {
-        private static CrmServiceClient _client;
-
         public static void Main(string[] args)
         {
             try
             {
-                using (_client = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRMConnectionString"].ConnectionString))
+                using (var client = new CrmServiceClient(ConfigurationManager.ConnectionStrings["CRMConnectionString"].ConnectionString))
                 {
-
                     Console.WriteLine("Login successfull...");
                     Console.Read();
                     Console.WriteLine("Enity name Account/Contact/Exit");
                     Console.Read();
                     String entityName = Console.ReadLine();
                     Console.WriteLine("Entity you entered is " + entityName);
-                      if (entityName == "Account")
+                      if (entityName.Eqauls("Account"))
                         {
-
-                            string fetchXMLAccount = @"
-                       <fetch mapping='logical'>
-                         <entity name='account'> 
-                            <attribute name='accountid'/> 
-                            <attribute name='name'/> 
-                            
-                         </entity> 
-                       </fetch> ";
-
-                            IOrganizationService crmService = _client.OrganizationServiceProxy;
+                            string fetchXMLAccount = @"<fetch mapping='logical' distinct='true'>
+                                                         <entity name='account'> 
+                                                            <attribute name='accountid'/> 
+                                                            <attribute name='name'/> 
+                                                         </entity> 
+                                                       </fetch>";
+                            IOrganizationService crmService = client.OrganizationServiceProxy;
                             EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXMLAccount));
-
                             if (result != null)
                             {
-                                foreach (var c in result.Entities)
+                                foreach(var c in result.Entities)
                                 {
                                     System.Console.WriteLine(c.Attributes["name"]);
                                 }
                             }
                             else
                             {
-                                throw new System.NullReferenceException();
-                                
-
+                               Console.WriteLine("No records found for the account entity.");
                             }
-                            Console.Read();
-
                         }
-
-
                         else
                         {
+                         Console.WriteLine("Contact information");
+                         string fetchXmlContact = @"<fetch mapping='logical'>
+                                                        <entity name='contact' distinct='true'> 
+                                                           <attribute name='fullname'/> 
+                                                           <attribute name='contactid'/> 
+                                                        </entity> 
+                                                     </fetch> ";
 
-                            Console.WriteLine("Contact information");
-
-                            string fetchXmlContact = @"
-                      <fetch mapping='logical'>
-                        <entity name='contact'> 
-                           <attribute name='fullname'/> 
-                           <attribute name='contactid'/> 
-
-                        </entity> 
-                      </fetch> ";
-
-                            IOrganizationService crmService = _client.OrganizationServiceProxy;
+                            IOrganizationService crmService = client.OrganizationServiceProxy;
                             EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXmlContact));
-
                             if (result != null)
                             {
-                                foreach (var c in result.Entities)
+                                foreach(var c in result.Entities)
                                 {
                                     System.Console.WriteLine(c.Attributes["fullname"]);
                                 }
                             }
                             else
                             {
-
-                                throw new System.NullReferenceException();
+                                Console.WriteLine("No records found for the contact entity.");
+                              
                             }
                         }
                     }
-                    
-
-                    Console.Read();
-                
-                 
-                
             }
-
-           
-            catch (FaultException<OrganizationServiceFault> ex)
+            catch
             {
-
                 throw;
             }
+                Console.Read();
         }
     }
 }
