@@ -24,33 +24,86 @@ namespace AccountDetail
 
                     Console.WriteLine("Login successfull...");
                     Console.Read();
-                    string fetch2 = @"
+                    Console.WriteLine("Enity name Account/Contact/Exit");
+                    Console.Read();
+                    String entityName = Console.ReadLine();
+                    Console.WriteLine("Entity you entered is " + entityName);
+                      if (entityName == "Account")
+                        {
+
+                            string fetchXMLAccount = @"
                        <fetch mapping='logical'>
                          <entity name='account'> 
                             <attribute name='accountid'/> 
                             <attribute name='name'/> 
-                            <link-entity name='systemuser' to='owninguser'> 
-                               <filter type='and'> 
-                                  <condition attribute='lastname' operator='not-null' /> 
-                               </filter> 
-                            </link-entity> 
+                            
                          </entity> 
                        </fetch> ";
 
-                    IOrganizationService crmService = _client.OrganizationServiceProxy;
-                    EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetch2));
+                            IOrganizationService crmService = _client.OrganizationServiceProxy;
+                            EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXMLAccount));
+
+                            if (result != null)
+                            {
+                                foreach (var c in result.Entities)
+                                {
+                                    System.Console.WriteLine(c.Attributes["name"]);
+                                }
+                            }
+                            else
+                            {
+                                throw new System.NullReferenceException();
+                                
+
+                            }
+                            Console.Read();
+
+                        }
 
 
-                    foreach (var c in result.Entities)
-                    {
-                        System.Console.WriteLine(c.Attributes["name"]);
-                     }
+                        else
+                        {
+
+                            Console.WriteLine("Contact information");
+
+                            string fetchXmlContact = @"
+                      <fetch mapping='logical'>
+                        <entity name='contact'> 
+                           <attribute name='fullname'/> 
+                           <attribute name='contactid'/> 
+
+                        </entity> 
+                      </fetch> ";
+
+                            IOrganizationService crmService = _client.OrganizationServiceProxy;
+                            EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXmlContact));
+
+                            if (result != null)
+                            {
+                                foreach (var c in result.Entities)
+                                {
+                                    System.Console.WriteLine(c.Attributes["fullname"]);
+                                }
+                            }
+                            else
+                            {
+
+                                throw new System.NullReferenceException();
+                            }
+                        }
+                    }
+                    
+
                     Console.Read();
-                }
+                
+                 
+                
             }
+
+           
             catch (FaultException<OrganizationServiceFault> ex)
             {
-                string message = ex.Message;
+
                 throw;
             }
         }
