@@ -37,11 +37,11 @@ namespace AccountDetail
                             EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXMLAccount));
                             if (result != null)
                             {
-                                foreach(var c in result.Entities)
+                                foreach(var entity in result.Entities)
                                 {
-                                    if(c.Attributes.Contains('name'))
+                                    if(entity.Attributes.Contains('name'))
                                     {
-                                      System.Console.WriteLine(c.Attributes["name"]);
+                                      System.Console.WriteLine(entity.Attributes["name"]);
                                     }
 
                                 }
@@ -65,11 +65,11 @@ namespace AccountDetail
                             EntityCollection result = crmService.RetrieveMultiple(new FetchExpression(fetchXmlContact));
                             if (result != null)
                             {
-                                foreach(var c in result.Entities)
+                                foreach(var entity in result.Entities)
                                 {
-                                   if(c.Attributes.Contains('fullname'))
+                                   if(entity.Attributes.Contains('fullname'))
                                    {
-                                     System.Console.WriteLine(c.Attributes["fullname"]);
+                                     System.Console.WriteLine(entity.Attributes["fullname"]);
                                    }
                                 }
                             }
