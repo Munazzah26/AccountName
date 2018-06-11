@@ -39,7 +39,11 @@ namespace AccountDetail
                             {
                                 foreach(var c in result.Entities)
                                 {
-                                    System.Console.WriteLine(c.Attributes["name"]);
+                                    if(c.Attributes.Contains('name'))
+                                    {
+                                      System.Console.WriteLine(c.Attributes["name"]);
+                                    }
+
                                 }
                             }
                             else
@@ -63,13 +67,15 @@ namespace AccountDetail
                             {
                                 foreach(var c in result.Entities)
                                 {
-                                    System.Console.WriteLine(c.Attributes["fullname"]);
+                                   if(c.Attributes.Contains('fullname'))
+                                   {
+                                     System.Console.WriteLine(c.Attributes["fullname"]);
+                                   }
                                 }
                             }
                             else
                             {
                                 Console.WriteLine("No records found for the contact entity.");
-                              
                             }
                         }
                     }
